@@ -45,6 +45,7 @@ class DBStorage:
         new_dict = {}
         for clss in classes:
             if cls is None or cls is classes[clss] or cls is clss:
+                # Might need to account for class doesn't exist
                 objs = self.__session.query(classes[clss]).all()
                 for obj in objs:
                     key = obj.__class__.__name__ + '.' + obj.id
@@ -74,3 +75,19 @@ class DBStorage:
     def close(self):
         """call remove() method on the private session attribute"""
         self.__session.remove()
+
+    def get(self, cls, id):
+        """retrieves an object from storage"""
+        objs = self.__session.query(cls).all()
+        # Might need to account for class doesn't exist
+        for obj in objs:
+            if obj.id == id:
+                return obj
+        return None
+
+    def count(self, cls=None):
+        """count the number of objects in storage"""
+        from models import storage
+        if cls is not None:
+            return len(storage.all(cls))
+        return len(storage.all())
