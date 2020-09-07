@@ -19,6 +19,7 @@ def stats():
     }
     return newdict
 
+
 @app_views.route("/stats")
 def class_stats():
     """ endpoint that gets the stats of each obj """
