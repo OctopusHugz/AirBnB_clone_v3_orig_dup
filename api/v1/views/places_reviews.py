@@ -45,7 +45,7 @@ def reviews(place_id):
                  methods=['GET', 'DELETE', 'PUT'])
 def review_id(review_id):
     """ /reviews/<review_id> route """
-    ignore_list = ["id", "user_id", "city_id", "created_at", "updated_at"]
+    ignore_list = ["id", "user_id", "place_id", "created_at", "updated_at"]
     review = storage.get(Review, review_id)
     if review is not None:
         if request.method == 'GET':
