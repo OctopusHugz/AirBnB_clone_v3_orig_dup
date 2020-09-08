@@ -14,8 +14,8 @@ def amenities():
     if request.method == 'GET':
         amenitiez = storage.all(Amenity).values()
         for amenity in amenitiez:
-                amen_list.append(amenity.to_dict())
-                return jsonify(amen_list)
+            amen_list.append(amenity.to_dict())
+        return jsonify(amen_list)
     elif request.method == 'POST':
         try:
             new_dict = request.get_json()
