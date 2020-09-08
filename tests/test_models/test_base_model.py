@@ -2,6 +2,7 @@
 """Test BaseModel for expected behavior and documentation"""
 from datetime import datetime
 import inspect
+from models.user import User
 import models
 import pep8 as pycodestyle
 import time
@@ -158,3 +159,13 @@ class TestBaseModel(unittest.TestCase):
         self.assertEqual(old_created_at, new_created_at)
         self.assertTrue(mock_storage.new.called)
         self.assertTrue(mock_storage.save.called)
+
+    def test_to_dict_params(self):
+        """test to_dict() deletes password key when required"""
+        user = User(name="Rumble", password="treats")
+        if models.storage_t != 'db':
+            user_dict = user.to_dict(removal="no")
+            self.assertIn("password", user_dict)
+        else:
+            user_dict = user.to_dict()
+            self.assertNotIn("password", user_dict)
