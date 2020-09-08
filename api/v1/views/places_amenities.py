@@ -52,7 +52,6 @@ def place_amenity_id(place_id, amenity_id):
         try:
             if amenity in amenities:
                 return jsonify(amenity.to_dict()), 200
-            # Will this work for appending amenity in db and fs?
             amenities.append(amenity)
             return jsonify(amenity.to_dict()), 201
         except:
