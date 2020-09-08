@@ -28,8 +28,9 @@ def reviews(place_id):
                     return {"error": "Missing user_id"}, 400
                 if 'text' not in new_dict.keys():
                     return {"error": "Missing text"}, 400
-                if storage.get(User, new_dict['user_id']) is None or
-                storage.get(Place, new_dict['place_id']) is None:
+                if storage.get(User, new_dict['user_id']) is None:
+                    return {"error": "Not found"}, 404
+                elif storage.get(Place, new_dict['place_id']) is None:
                     return {"error": "Not found"}, 404
                 new_inst = Review(**new_dict)
                 new_inst.save()
