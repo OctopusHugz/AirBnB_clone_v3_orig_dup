@@ -30,8 +30,6 @@ def reviews(place_id):
                     return {"error": "Missing text"}, 400
                 if storage.get(User, new_dict['user_id']) is None:
                     return {"error": "Not found"}, 404
-                elif storage.get(Place, new_dict['place_id']) is None:
-                    return {"error": "Not found"}, 404
                 new_dict.update({'place_id': place_id})
                 new_inst = Review(**new_dict)
                 new_inst.save()
