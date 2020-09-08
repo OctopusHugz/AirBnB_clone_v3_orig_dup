@@ -15,17 +15,17 @@ def amenities():
         amenitiez = storage.all(Amenity).values()
         for amenity in amenitiez:
                 amen_list.append(amenity.to_dict())
-            return jsonify(amen_list)
-        elif request.method == 'POST':
-            try:
-                new_dict = request.get_json()
-                if 'name' not in new_dict.keys():
-                    return {"error": "Missing name"}, 400
-                new_inst = Amenity(**new_dict)
-                new_inst.save()
-                return jsonify(new_inst.to_dict()), 201
-            except:
-                return {"error": "Not a JSON"}, 400
+                return jsonify(amen_list)
+    elif request.method == 'POST':
+        try:
+            new_dict = request.get_json()
+            if 'name' not in new_dict.keys():
+                return {"error": "Missing name"}, 400
+            new_inst = Amenity(**new_dict)
+            new_inst.save()
+            return jsonify(new_inst.to_dict()), 201
+        except:
+            return {"error": "Not a JSON"}, 400
     return {"error": "Not found"}, 404
 
 
