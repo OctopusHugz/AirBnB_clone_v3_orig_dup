@@ -50,7 +50,7 @@ def place_amenity_id(place_id, amenity_id):
         return {}, 200
     elif request.method == 'POST':
         try:
-            if amenity_id in amenities:
+            if amenity_id in amenities.keys():
                 return jsonify(amenity.to_dict()), 200
             # Will this work for appending amenity in db and fs?
             amenities.append(amenity)
