@@ -30,7 +30,6 @@ def place_amenities(place_id):
         return jsonify(amenity_list)
 
 
-
 @app_views.route("/places/<place_id>/amenities/<amenity_id>",
                  strict_slashes=False, methods=['DELETE', 'POST'])
 def place_amenity_id(place_id, amenity_id):
