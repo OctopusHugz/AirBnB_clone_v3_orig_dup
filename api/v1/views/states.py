@@ -21,6 +21,7 @@ def states():
             if 'name' not in new_dict.keys():
                 return {"error": "Missing name"}, 400
             new_inst = State(**new_dict)
+            new_inst.save()
             return jsonify(new_inst.to_dict()), 201
         except:
             return {"error": "Not a JSON"}, 400
@@ -30,26 +31,25 @@ def states():
                  methods=['GET', 'DELETE', 'PUT'])
 def state_id(state_id):
     """ returns the state or 404 """
-    states = storage.all(State).values()
-    for state in states:
-        if state.id == state_id:
-            if request.method == 'GET':
-                return jsonify(state.to_dict())
-            elif request.method == 'DELETE':
+    state = storage.get(State, state_id)
+    if state is not None:
+        if request.method == 'GET':
+            return jsonify(state.to_dict())
+        elif request.method == 'DELETE':
+            storage.delete(state)
+            storage.save()
+            return {}, 200
+        elif request.method == 'PUT':
+            try:
+                new_dict = request.get_json()
+                state_dict = state.to_dict()
+                for key, value in new_dict.items():
+                    if key not in ["id", "created_at", "updated_at"]:
+                        state_dict.update({key: value})
                 storage.delete(state)
+                storage.new(State(**state_dict))
                 storage.save()
-                return {}, 200
-            elif request.method == 'PUT':
-                try:
-                    new_dict = request.get_json()
-                    state_dict = state.to_dict()
-                    for key, value in new_dict.items():
-                        if key not in ["id", "created_at", "updated_at"]:
-                            state_dict.update({key: value})
-                    storage.delete(state)
-                    storage.new(State(**state_dict))
-                    storage.save()
-                    return jsonify(state_dict), 200
-                except:
-                    return {"error": "Not a JSON"}, 400
+                return jsonify(state_dict), 200
+            except:
+                return {"error": "Not a JSON"}, 400
     return {"error": "Not found"}, 404
