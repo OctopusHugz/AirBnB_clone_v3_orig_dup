@@ -5,6 +5,8 @@ Contains the TestUserDocs classes
 
 from datetime import datetime
 import inspect
+from hashlib import md5
+from _hashlib import HASH
 import models
 from models import user
 from models.base_model import BaseModel
@@ -130,3 +132,8 @@ class TestUser(unittest.TestCase):
         user = User()
         string = "[User] ({}) {}".format(user.id, user.__dict__)
         self.assertEqual(string, str(user))
+
+    def test_password_md5(self):
+        """Test that User has md password"""
+        user = User(name="Rumble", password="treats")
+        self.assertIsInstance(user.password, HASH)
