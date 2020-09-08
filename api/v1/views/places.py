@@ -29,6 +29,7 @@ def places(city_id):
                     return {"error": "Missing name"}, 400
                 if storage.get(User, new_dict['user_id']) is None:
                     return {"error": "Not found"}, 404
+                new_dict.update({'city_id': city_id})
                 new_inst = Place(**new_dict)
                 new_inst.save()
                 return jsonify(new_inst.to_dict()), 201
