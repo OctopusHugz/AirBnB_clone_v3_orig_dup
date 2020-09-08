@@ -43,14 +43,14 @@ def place_amenity_id(place_id, amenity_id):
     else:
         amenities = place.amenities
     if request.method == 'DELETE':
-        if amenity_id not in amenities:
+        if amenity not in amenities:
             return {"error": "Not found"}, 404
         storage.delete(amenity)
         storage.save()
         return {}, 200
     elif request.method == 'POST':
         try:
-            if amenity_id in amenities.keys():
+            if amenity in amenities:
                 return jsonify(amenity.to_dict()), 200
             # Will this work for appending amenity in db and fs?
             amenities.append(amenity)
