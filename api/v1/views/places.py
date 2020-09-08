@@ -25,10 +25,10 @@ def places(city_id):
                 new_dict = request.get_json()
                 if 'user_id' not in new_dict.keys():
                     return {"error": "Missing user_id"}, 400
-                elif storage.get(User, new_dict['user_id']) is None:
-                    return {"error": "Not found"}, 404
-                elif 'name' not in new_dict.keys():
+                if 'name' not in new_dict.keys():
                     return {"error": "Missing name"}, 400
+                if storage.get(User, new_dict['user_id']) is None:
+                    return {"error": "Not found"}, 404
                 new_inst = Place(**new_dict)
                 new_inst.save()
                 return jsonify(new_inst.to_dict()), 201
