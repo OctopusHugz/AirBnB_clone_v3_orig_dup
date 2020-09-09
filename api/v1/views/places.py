@@ -107,6 +107,10 @@ def places_search():
             my_state = storage.get(State, state_id)
             if my_state is not None:
                 slist.append(my_state)
+        for state in slist:
+            for city in state.cities:
+                for place in city.places:
+                    plist.append(place.to_dict())
         if cities_len > 0:
             for city_id in cities_list:
                 my_city = storage.get(City, city_id)
