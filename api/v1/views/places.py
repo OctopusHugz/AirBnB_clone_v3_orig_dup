@@ -3,6 +3,8 @@
 from models.place import Place
 from models.city import City
 from models.user import User
+from models.state import State
+from models.amenity import Amenity
 from models import storage
 from api.v1.views import app_views
 from flask import jsonify, request
@@ -65,3 +67,69 @@ def place_id(place_id):
             except:
                 return {"error": "Not a JSON"}, 400
     return {"error": "Not found"}, 404
+
+
+@app_views.route("/places_search", strict_slashes=False, methods=['POST'])
+def places_search():
+    """ /places_search route """
+    places = storage.all(Place).values()
+    places_list = []
+    slist = []
+    clist = []
+    alist = []
+    plist = []
+    states_len = 0
+    cities_len = 0
+    amenities_len = 0
+    try:
+        new_dict = request.get_json()
+    except:
+        return {"error": "Not a JSON"}, 400
+    for place in places:
+        places_list.append(place.to_dict())
+    if len(new_dict) == 0:
+        return jsonify(places_list)
+    if 'states' in new_dict:
+        states_len = len(new_dict['states'])
+        states_list = new_dict['states']
+    if 'cities' in new_dict:
+        cities_len = len(new_dict['cities'])
+        cities_list = new_dict['cities']
+    if 'amenities' in new_dict:
+        amenities_len = len(new_dict['amenities'])
+        amenities_list = new_dict['amenities']
+    total_len = states_len + cities_len + amenities_len
+    if total_len == 0:
+        return jsonify(places_list)
+    if states_len > 0:
+        for state_id in states_list:
+            slist.append(storage.get(State, state_id))
+        if cities_len > 0:
+            for city_id in cities_list:
+                clist.append(storage.get(City, city_id))
+            for city in clist:
+                for place in city.places:
+                    plist.append(place.to_dict())
+            return jsonify(plist)
+        else:
+            for state in slist:
+                for city in state.cities:
+                    for place in city.places:
+                        plist.append(place.to_dict())
+            return jsonify(plist)
+    elif cities_len > 0:
+        for city_id in cities_list:
+                clist.append(storage.get(City, city_id))
+        for city in clist:
+            for place in city.places:
+                plist.append(place.to_dict())
+        return jsonify(plist)
+    elif amenities_len > 0:
+        for amenity_id in amenities_list:
+            alist.append(storage.get(Amenity, amenity_id))
+        for place in places:
+            for amenity in alist:
+                if amenity not in place.amenities:
+                    break
+            plist.append(place)
+        return jsonify(plist)
