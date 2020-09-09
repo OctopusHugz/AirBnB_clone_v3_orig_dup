@@ -105,12 +105,12 @@ def places_search():
         for state_id in states_list:
             my_state = storage.get(State, state_id)
             if my_state is not None:
-                slist.append(my_state)
+                slist.append(my_state.to_dict())
         if cities_len > 0:
             for city_id in cities_list:
                 my_city = storage.get(City, city_id)
                 if my_city is not None:
-                    clist.append(my_city)
+                    clist.append(my_city.to_dict())
             for city in clist:
                 for place in city.places:
                     plist.append(place.to_dict())
@@ -125,7 +125,7 @@ def places_search():
         for city_id in cities_list:
             my_city = storage.get(City, city_id)
             if my_city is not None:
-                clist.append(my_city)
+                clist.append(my_city.to_dict())
         for city in clist:
             for place in city.places:
                 plist.append(place.to_dict())
@@ -134,10 +134,10 @@ def places_search():
         for amenity_id in amenities_list:
             my_amenity = storage.get(Amenity, amenity_id)
             if my_amenity is not None:
-                alist.append(my_amenity)
+                alist.append(my_amenity.to_dict())
         for place in places:
             for amenity in alist:
                 if amenity not in place.amenities:
                     break
-            plist.append(place)
+            plist.append(place.to_dict())
         return jsonify(plist)
