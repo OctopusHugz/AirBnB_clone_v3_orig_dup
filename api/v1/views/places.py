@@ -81,7 +81,7 @@ def places_search():
     states_len = 0
     cities_len = 0
     amenities_len = 0
-    flag = 1
+    amenity_exists = 1
     try:
         new_dict = request.get_json()
     except:
@@ -111,22 +111,7 @@ def places_search():
             for city in state.cities:
                 for place in city.places:
                     plist.append(place.to_dict())
-        if cities_len > 0:
-            for city_id in cities_list:
-                my_city = storage.get(City, city_id)
-                if my_city is not None:
-                    clist.append(my_city)
-            for city in clist:
-                for place in city.places:
-                    plist.append(place.to_dict())
-            return jsonify(plist)
-        else:
-            for state in slist:
-                for city in state.cities:
-                    for place in city.places:
-                        plist.append(place.to_dict())
-            return jsonify(plist)
-    elif cities_len > 0:
+    if cities_len > 0:
         for city_id in cities_list:
             my_city = storage.get(City, city_id)
             if my_city is not None:
@@ -134,8 +119,7 @@ def places_search():
         for city in clist:
             for place in city.places:
                 plist.append(place.to_dict())
-        return jsonify(plist)
-    elif amenities_len > 0:
+    if amenities_len > 0:
         for amenity_id in amenities_list:
             my_amenity = storage.get(Amenity, amenity_id)
             if my_amenity is not None:
@@ -143,8 +127,8 @@ def places_search():
         for place in places:
             for amenity in alist:
                 if amenity not in place.amenities:
-                    flag = 0
+                    amenity_exists = 0
                     break
-            if flag:
+            if amenity_exists:
                 plist.append(place.to_dict())
-        return jsonify(plist)
+    return jsonify(plist)
