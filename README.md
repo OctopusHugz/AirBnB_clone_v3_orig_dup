@@ -72,10 +72,14 @@ TestBaseModelDocs class:
 * `def test_bm_func_docstrings(self)` - Test for the presence of docstrings in BaseModel methods
 
 TestBaseModel class:
-* `def test_is_base_model(self)` - Test that the instatiation of a BaseModel works
-* `def test_created_at_instantiation(self)` - Test created_at is a pub. instance attribute of type datetime
-* `def test_updated_at_instantiation(self)` - Test updated_at is a pub. instance attribute of type datetime
-* `def test_diff_datetime_objs(self)` - Test that two BaseModel instances have different datetime objects
+* `def test_instantiation(self)` - Test that the instatiation of a BaseModel works
+* `def test_datetime_attributes(self)` - Test 2 BaseModel instances and their datetime objs
+* `def test_uuid(self)` - Test that id is a valid uuid
+* `def test_to_dict(self)` - Test conversion of object attributes for json
+* `def test_to_dict_values(self)` - Test that vcalues in dict returned from to_dict are correct
+* `def test_str(self)` - Test that the str method has correct output
+* `def test_save(self)` - Test that the save method updates `updated_at` and calls `storage.save`
+* `def test_to_dict_params(self)` - Test that to_dict() deletes password key when required
 
 [/test_models/test_amenity.py](/tests/test_models/test_amenity.py) - Contains the TestAmenityDocs class:
 * `def setUpClass(cls)` - Set up for the doc tests
