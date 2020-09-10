@@ -14,6 +14,7 @@ The console is the first segment of the AirBnB project at Holberton School that 
 * [File Descriptions](#file-descriptions)
 * [Usage](#usage)
 * [Examples of use](#examples-of-use)
+* [API](#api)
 * [Bugs](#bugs)
 * [Authors](#authors)
 * [License](#license)
@@ -153,7 +154,18 @@ EOF  all  create  destroy  help  quit  show  update
 ** no instance found **
 (hbnb) quit
 ```
-
+## API
+### Response Codes
+```
+200 : OK
+201: created => after a POST request
+204: no content => can be return after a DELETE request
+400: bad request => the server doesnt understand the request
+401: unauthorized => client user cant be identified
+403: forbidden => client user is identified but not allowed to access a resource
+404: not found => resource doesnt exist
+500: internal server error
+```
 ## Bugs
 No known bugs at this time.
 
