@@ -74,6 +74,9 @@ def places_search():
     """ /places_search route """
     places = storage.all(Place).values()
     places_list = []
+    states_list = []
+    cities_list = []
+    amenities_list = []
     slist = []
     clist = []
     alist = []
@@ -85,6 +88,8 @@ def places_search():
     try:
         new_dict = request.get_json()
     except:
+        return {"error": "Not a JSON"}, 400
+    if request.headers['Content-Type'] != 'application/json':
         return {"error": "Not a JSON"}, 400
     for place in places:
         places_list.append(place.to_dict())
@@ -99,6 +104,7 @@ def places_search():
     if 'amenities' in new_dict:
         amenities_len = len(new_dict['amenities'])
         amenities_list = new_dict['amenities']
+    amenity_list_length = len(amenities_list)
     total_len = states_len + cities_len + amenities_len
     if total_len == 0:
         return jsonify(places_list)
@@ -120,16 +126,11 @@ def places_search():
             for place in city.places:
                 plist.append(place.to_dict())
     if amenities_len > 0:
-        for amenity_id in amenities_list:
-            my_amenity = storage.get(Amenity, amenity_id)
-            if my_amenity is not None:
-                alist.append(my_amenity)
-        amenity_list_length = len(alist)
         for place in places:
             amenity_exists_list = []
-            for amenity in alist:
-                for a in place.amenities:
-                    if a.name == amenity.name:
+            for a in place.amenities:
+                for amenity_id in amenities_list:
+                    if a.id == amenity_id:
                         amenity_exists_list.append(1)
                         break
             if len(amenity_exists_list) == amenity_list_length:
