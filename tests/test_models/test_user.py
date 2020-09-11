@@ -132,8 +132,3 @@ class TestUser(unittest.TestCase):
         user = User()
         string = "[User] ({}) {}".format(user.id, user.__dict__)
         self.assertEqual(string, str(user))
-
-    def test_password_md5(self):
-        """Test that User has md password"""
-        user = User(name="Rumble", password="treats")
-        self.assertIsInstance(user.password, HASH)
