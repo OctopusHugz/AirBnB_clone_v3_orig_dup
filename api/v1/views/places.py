@@ -81,6 +81,8 @@ def places_search():
     clist = []
     alist = []
     plist = []
+    slist_two = []
+    clist_two = []
     states_len = 0
     cities_len = 0
     amenities_len = 0
@@ -138,15 +140,37 @@ def places_search():
                     plist.append(place.to_dict())
         else:
             plist_two = []
-            for place in plist:
-                amenity_exists_list = []
-                for a in place.amenities:
-                    for amenity_id in amenities_list:
-                        if a.id == amenity_id:
-                            amenity_exists_list.append(1)
-                            break
-                if len(amenity_exists_list) == amenity_list_length:
-                    plist_two.append(place.to_dict())
+            if states_len > 0:
+                for state_id in states_list:
+                    my_state = storage.get(State, state_id)
+                    if my_state is not None:
+                        slist_two.append(my_state)
+                for state in slist_two:
+                    for city in state.cities:
+                        for place in city.places:
+                            amenity_exists_list = []
+                            for a in place.amenities:
+                                for amenity_id in amenities_list:
+                                    if a.id == amenity_id:
+                                        amenity_exists_list.append(1)
+                                        break
+                            if len(amenity_exists_list) == amenity_list_length:
+                                plist_two.append(place.to_dict())
+            if cities_len > 0:
+                for city_id in cities_list:
+                    my_city = storage.get(City, city_id)
+                    if my_city is not None:
+                        clist_two.append(my_city)
+                for city in clist_two:
+                    for place in city.places:
+                        amenity_exists_list = []
+                        for a in place.amenities:
+                            for amenity_id in amenities_list:
+                                if a.id == amenity_id:
+                                    amenity_exists_list.append(1)
+                                    break
+                        if len(amenity_exists_list) == amenity_list_length:
+                            plist_two.append(place.to_dict())
             if len(plist_two) > 0:
                 return jsonify(plist_two)
     if len(plist) > 0:
